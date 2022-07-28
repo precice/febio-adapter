@@ -1,1 +1,1 @@
-# febio-adapter
+# FEBio-preCICE adapter
