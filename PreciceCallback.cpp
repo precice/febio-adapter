@@ -46,6 +46,7 @@ PreciceCallback::getRelevantMaterialPoints(FEModel *fem, const std::string &elem
 void PreciceCallback::Init(FEModel *fem) {
     feLogInfo("Init precice");
     using json = nlohmann::json;
+    //TODO make this config path configurable
     std::ifstream config_file("febio-config.json");
     json config_json;
     config_file >> config_json;
@@ -137,7 +138,7 @@ void PreciceCallback::Init(FEModel *fem) {
                                         vector<double>(vectorSize, 0)};
         preciceReadData.insert(std::pair<std::string, FebioConfigEntry>(mappingName, configEntry));
     }
-    feLog(infoOutput.str().c_str());
+    feLogInfo(infoOutput.str().c_str());
 
     // Setup vertices
     vertexIDs.resize(numberOfVerticies);
@@ -155,7 +156,7 @@ bool PreciceCallback::Execute(FEModel &fem, int nreason) {
         Init(&fem);
     } else if (nreason == CB_UPDATE_TIME) {
         if (precice->isActionRequired(cowic)) {
-            feLog("CB_Saving Checkpoint\n");
+            feLogInfo("CB_UPDATE_TIME - Saving Checkpoint\n");
             // Save
             // this uses dmp.open(true,true) which leads to the time controller not beeing serialized
             // Also setting dmp.open(true,false) leads to segfault dont know why yet
@@ -174,8 +175,8 @@ bool PreciceCallback::Execute(FEModel &fem, int nreason) {
             precice->markActionFulfilled(cowic);
         }
         dt = min(precice_dt, fem.GetCurrentStep()->m_dt);
-        feLog("Current Time %f\n", fem.GetTime().currentTime);
-        feLog("Timestep %f\n", dt);
+        feLogInfo("Current Simulation Time %f\n", fem.GetTime().currentTime);
+        feLogInfo("Timestep %f\n", dt);
         fem.GetCurrentStep()->m_dt = dt;
     } else if (nreason == CB_MAJOR_ITERS) {
         if (!precice->isCouplingOngoing()) {
@@ -185,7 +186,7 @@ bool PreciceCallback::Execute(FEModel &fem, int nreason) {
             WriteData(&fem);
             precice_dt = precice->advance(dt);
             if (precice->isActionRequired(coric)) {
-                feLog("Restoring Checkpoint\n");
+                feLogInfo("CB_MAJOR_ITERS - Restoring Checkpoint\n");
                 // Restore
                 // taken from FEAnalysis.cpp Line 475 ff
                 // restore the previous state
@@ -196,7 +197,6 @@ bool PreciceCallback::Execute(FEModel &fem, int nreason) {
                 newTimeController->CopyFrom(checkpointTimeStepController);
                 fem.GetCurrentStep()->m_timeController = newTimeController;
                 fem.GetTime().currentTime = checkpoint_time;
-                feLogInfo("Checkpoint Time FEBio: %f\n", checkpoint_time);
                 fem.GetCurrentStep()->m_ntimesteps--; // Decrease number of steps because it gets increased right after this
                 precice->markActionFulfilled(coric);
             }
@@ -268,7 +268,6 @@ void PreciceCallback::WriteData(FEModel *fem) {
             for (int j = 0; j < element.GaussPoints(); j++) {
                 FEMaterialPoint *materialPoint = element.GetMaterialPoint(j);
                 if (!materialPoint) {
-                    std::cout << "Material Point empty\n";
                     continue;
                 }
 
