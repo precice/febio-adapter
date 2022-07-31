@@ -91,3 +91,9 @@ all attributes are contained in the `coupling_params` dict
    }
 }
 ```
+
+## Registering classes and generate.py
+As we use reflection for the MaterialPoints, one has to register custom MaterialPoint classes with the plugin in `FEBioReflection.cpp` and extend two if statments. These statments are in `PreciceCallback::insertData` and `PreciceCallback::extractData`.
+
+We added a `generate.py` that searches all subclasses of `FEMaterialPoint` in the current directory (your FEBio dir) and writes the needed code snippets to four files `FEBioReflection.cpp`, `includes` `insertData` and `extractData`. The `FEBioReflection.cpp` can directly be copied over the other three files need to be manually integrated into the `PreciceCallback.cpp`
+To use `generate.py` you need to add the C++ header files to the include path
