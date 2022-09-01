@@ -1,27 +1,32 @@
-
 # FEBio-preCICE adapter
 
 > experimental preCICE-adapter for the software tool FEBio.
 
-The FEBio-preCICE adapter is a [preCICE Adapter](https://precice.org) for [FEBio](https://github.com/febiosoftware/FEBio). It allows to exchange data on `FEMaterialPoints`  via preCICE. What data and to which preCICE variable can be configured in the `febio-config.json`.
-For an easy setup use the provided `.so` file, or follow the build step to compile it for your platform.
+The FEBio-preCICE adapter is a preCICE adapter for [FEBio](https://github.com/febiosoftware/FEBio). It allows to exchange data on `FEMaterialPoints`  via preCICE. What data and to which preCICE variable is configured via a JSON file (see example file `febio-config.json` below). For an easy setup use the provided `.so` file, or follow the build step to compile it for your platform.
 
-## Installing the plugin
+## Required Dependencies
 
-We provide a x86 shared library as download option. This `.so` file requires preCICE, rttr and FEBio3.2 to be installed.
+The following dependencies are required:
 
-## Building the plugin
-To build this plugin, get a checkout of the FEBio version you want to build against.
-Set the cmake variable `FEBio_LIB_DIR` to this dir, as we need the include files to compile this plugin.
+- [preCICE](https://precice.org/installation-overview.html)
+- [rttr](https://www.rttr.org/)
+
+## Building the adapter
+
+For quick use, we provide a x86 shared library as download option. This `.so` file requires all the dependencies mentioned above. If you want to build the adapter yourself, checkout the FEBio repository and go to the branch of the version you want to build against. Set the cmake variable `FEBio_LIB_DIR` to this dir, as we need the include files to compile this plugin.
 Then run:
-```
+
+```bash
 cmake
 make
 ```
-this produces the `libFEBioPreciceAdapter.so` in your cmake output folder. This is the file you need to reference in your `febio.xml`.
 
-## Loading the plugin
+Now there is a `libFEBioPreciceAdapter.so` in your cmake output folder. This is the file you need to refer to in your `febio.xml`.
+
+## Using the adapter
+
 Create a `febio.xml`
+
 ```xml
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <febio_config version="3.0">
@@ -29,18 +34,21 @@ Create a `febio.xml`
         <import>$pathToThePluginFile/libFEBioPreciceAdapter.so</import>
 </febio_config>
 ```
+
 in your model folder.
 Add the following sinppet to your `your_input_file.feb`  right below the Module section.
+
 ```xml
         <Code>
                 <callback name="precice_callback"/>
         </Code>
-
 ```
+
 Add a preCICE config file and create a `febio-config.json` with the options below
 Than call febio with `febio3 -cnf ./febio.xml you_input_file.feb`
 
-# configuration options
+## Configuration options
+
 all attributes are contained in the `coupling_params` dict
 | Key                       | Possible Values                            | Description                                                                                                                                                        |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -52,7 +60,8 @@ all attributes are contained in the `coupling_params` dict
 | `write_mesh_name`           | | name of the mesh to write to |
 | `write_data_name`            |           | dict, see below |
 
-## write/read_data_name options
+### write/read_data_name options
+
 | Key                       | Possible Values                            | Description     |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `type`                   | `function` `variable`                    | type of attribute for the FEMaterialPoint that is read or written.                                                                                                    |
@@ -63,7 +72,8 @@ all attributes are contained in the `coupling_params` dict
 | `mapping_name`                      |                              | Name of data point in preCICE|
 | `precice_type`                   | `scalar` `vector`                             | type of data point in precice                                                                                                          |
 
-## Example configuration
+### Example configuration
+
 ```json
 {
     "coupling_params": {
