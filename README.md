@@ -47,9 +47,10 @@ Add the following sinppet to your `your_input_file.feb`  right below the Module 
 Add a preCICE config file and create a `febio-config.json` with the options below
 Than call febio with `febio3 -cnf ./febio.xml you_input_file.feb`
 
-## Configuration options
+### Configuration options
 
-all attributes are contained in the `coupling_params` dict
+All attributes are contained in the `coupling_params` dict. The attributes are:
+
 | Key | Possible Values | Description |
 | --- | --- | --- |
 | `element_set_to_couple` |  | Name of the element set that should be coupled via preCICE. Can be found in the febio input file. |
@@ -60,7 +61,9 @@ all attributes are contained in the `coupling_params` dict
 | `write_mesh_name` |  | name of the mesh to write to |
 | `write_data_name` |  | dict, see below |
 
-## write/read_data_name options
+#### write/read_data_name options
+
+The adapter can read and write various data to and from FEBio. Possible data that can be handled are:
 
 | Key | Possible Values | Description |
 | --- | --- | --- |
@@ -72,7 +75,7 @@ all attributes are contained in the `coupling_params` dict
 | `mapping_name` |  | Name of data point in preCICE |
 | `precice_type` | `scalar` `vector` | type of data point in precice |
 
-## Example configuration
+### Example configuration
 
 ```json
 {
@@ -97,7 +100,7 @@ all attributes are contained in the `coupling_params` dict
 }
 ```
 
-## Registering classes and generate.py
+### Registering classes and generate.py
 
 As we use reflection for the MaterialPoints, one has to register custom MaterialPoint classes with the plugin in `FEBioReflection.cpp` and extend two if statments. These statments are in `PreciceCallback::insertData` and `PreciceCallback::extractData`.
 
