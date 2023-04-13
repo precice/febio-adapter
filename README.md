@@ -4,6 +4,8 @@
 
 The FEBio-preCICE adapter is a preCICE adapter for [FEBio](https://github.com/febiosoftware/FEBio). It allows to exchange data on `FEMaterialPoints`  via preCICE. What data and to which preCICE variable is configured via a JSON file (see example file `febio-config.json` below). For an easy setup use the provided `.so` file, or follow the build step to compile it for your platform. The adapter allows to exchange data on `FEMaterialPoints` with other solvers. The adapter is configured using a JSON file.
 
+Design and development of this adapter is described in detail in the [Master thesis of Fritz Otlinghaus](http://dx.doi.org/10.18419/opus-12291).
+
 ## Required Dependencies
 
 The following dependencies are required:
