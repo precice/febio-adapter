@@ -15,6 +15,7 @@
 #include <FECore/FEMaterialPoint.h>
 #include <FECore/FESurface.h>
 #include <FECore/FEDiscreteMaterial.h>
+#include <FECore/FETimeStepController.h>
 #include <FEBioMech/FEDiscreteElasticMaterial.h>
 #include <FEBioMech/FEElasticMaterialPoint.h>
 #include <FEBioMech/FEContactSurface.h>
@@ -29,20 +30,20 @@
 #include <FEBioMech/FEElasticMixture.h>
 #include <FEBioMech/FEReactiveVEMaterialPoint.h>
 #include <FEBioMech/FESlidingInterface.h>
-#include <FEBioMech/FERodriguezGrowth.h>
-#include <FEBioMech/FEElasticMaterial2O.h>
-#include <FEBioMech/FEMicroMaterial.h>
-#include <FEBioMech/FEMicroMaterial2O.h>
+//#include <FEBioMech/FERodriguezGrowth.h>
+#include <FEBioRVE/FEElasticMaterial2O.h>
+#include <FEBioRVE/FEMicroMaterial.h>
+#include <FEBioRVE/FEMicroMaterial2O.h>
 #include <FEBioMech/FEElasticMultigeneration.h>
 #include <FEBioMech/FEReactivePlasticDamageMaterialPoint.h>
 #include <FEBioMech/FEReactivePlasticityMaterialPoint.h>
 #include <FEBioMech/FETrussMaterial.h>
 #include <FEBioMix/FEBiphasic.h>
-#include <FEBioMech/FEViscousMaterialPoint.h>
+//#include <FEBioMech/FEViscousMaterialPoint.h>
 #include <FEBioMech/FEMRVonMisesFibers.h>
 #include <FEBioMech/FERemodelingElasticMaterial.h>
 #include <FEBioMech/FEDamageTransIsoMooneyRivlin.h>
-#include <FEBioMech/FEFatigueMaterial.h>
+//#include <FEBioMech/FEFatigueMaterial.h>
 #include <FEBioFluid/FEFluidMaterialPoint.h>
 #include <FEBioMix/FESolutesMaterialPoint.h>
 #include <FEBioFluid/FESolutesMaterial.h>
@@ -52,6 +53,7 @@
 #include <FEBioFluid/FEBiphasicFSI.h>
 #include <FEBioMix/FEBiphasicContactSurface.h>
 #include <FEBioMix/FEMultiphasicMultigeneration.h>
+#include <sstream>
 
 using namespace rttr;
 
@@ -451,8 +453,6 @@ void PreciceCallback::insertData(FEMaterialPoint *materialPoint, const std::stri
         return wrapper.insert<FEElasticMixtureMaterialPoint>(GetFEModel());
     } else if (className == "FEReactiveVEMaterialPoint") {
         return wrapper.insert<FEReactiveVEMaterialPoint>(GetFEModel());
-    } else if (className == "FERodriguezMaterialPoint") {
-        return wrapper.insert<FERodriguezMaterialPoint>(GetFEModel());
     } else if (className == "FEElasticMaterialPoint2O") {
         return wrapper.insert<FEElasticMaterialPoint2O>(GetFEModel());
     } else if (className == "FEMicroMaterialPoint") {
@@ -469,16 +469,12 @@ void PreciceCallback::insertData(FEMaterialPoint *materialPoint, const std::stri
         return wrapper.insert<FETrussMaterialPoint>(GetFEModel());
     } else if (className == "FEBiphasicMaterialPoint") {
         return wrapper.insert<FEBiphasicMaterialPoint>(GetFEModel());
-    } else if (className == "FEViscousMaterialPoint") {
-        return wrapper.insert<FEViscousMaterialPoint>(GetFEModel());
     } else if (className == "FEMRVonMisesMaterialPoint") {
         return wrapper.insert<FEMRVonMisesMaterialPoint>(GetFEModel());
     } else if (className == "FERemodelingMaterialPoint") {
         return wrapper.insert<FERemodelingMaterialPoint>(GetFEModel());
     } else if (className == "FETIMRDamageMaterialPoint") {
         return wrapper.insert<FETIMRDamageMaterialPoint>(GetFEModel());
-    } else if (className == "FEFatigueMaterialPoint") {
-        return wrapper.insert<FEFatigueMaterialPoint>(GetFEModel());
     } else if (className == "FEFluidMaterialPoint") {
         return wrapper.insert<FEFluidMaterialPoint>(GetFEModel());
     } else if (className == "FESolutesMaterialPoint") {
@@ -613,8 +609,6 @@ PreciceCallback::extractData(FEMaterialPoint *materialPoint, const std::string &
         return wrapper.extract<FEElasticMixtureMaterialPoint>(GetFEModel());
     } else if (className == "FEReactiveVEMaterialPoint") {
         return wrapper.extract<FEReactiveVEMaterialPoint>(GetFEModel());
-    } else if (className == "FERodriguezMaterialPoint") {
-        return wrapper.extract<FERodriguezMaterialPoint>(GetFEModel());
     } else if (className == "FEElasticMaterialPoint2O") {
         return wrapper.extract<FEElasticMaterialPoint2O>(GetFEModel());
     } else if (className == "FEMicroMaterialPoint") {
@@ -631,16 +625,12 @@ PreciceCallback::extractData(FEMaterialPoint *materialPoint, const std::string &
         return wrapper.extract<FETrussMaterialPoint>(GetFEModel());
     } else if (className == "FEBiphasicMaterialPoint") {
         return wrapper.extract<FEBiphasicMaterialPoint>(GetFEModel());
-    } else if (className == "FEViscousMaterialPoint") {
-        return wrapper.extract<FEViscousMaterialPoint>(GetFEModel());
     } else if (className == "FEMRVonMisesMaterialPoint") {
         return wrapper.extract<FEMRVonMisesMaterialPoint>(GetFEModel());
     } else if (className == "FERemodelingMaterialPoint") {
         return wrapper.extract<FERemodelingMaterialPoint>(GetFEModel());
     } else if (className == "FETIMRDamageMaterialPoint") {
         return wrapper.extract<FETIMRDamageMaterialPoint>(GetFEModel());
-    } else if (className == "FEFatigueMaterialPoint") {
-        return wrapper.extract<FEFatigueMaterialPoint>(GetFEModel());
     } else if (className == "FEFluidMaterialPoint") {
         return wrapper.extract<FEFluidMaterialPoint>(GetFEModel());
     } else if (className == "FESolutesMaterialPoint") {
