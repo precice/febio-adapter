@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<precice-configuration>
+  <log>
+    <sink
+      filter="%Severity% > debug"
+      format="---[precice] %ColorizedSeverity% %Message%"
+      enabled="true" />
+  </log>
+
+  <solver-interface dimensions="2">
+    <data:scalar name="P_ext" />
+
+    <mesh name="FEBioMesh">
+       <use-data name="P_ext"/>
+    </mesh>
+
+    <mesh name="Generator-Mesh">
+      <use-data name="P_ext" />
+    </mesh>
+    <participant name="Generator">
+      <use-mesh name="Generator-Mesh" provide="yes" />
+      <write-data name="P_ext" mesh="Generator-Mesh" />
+    </participant>
+    <participant name="FEBio">
+      <use-mesh name="Generator-Mesh" from="Generator"/>
+      <use-mesh name="FEBioMesh" provide="yes"/>
+      <mapping:nearest-neighbor
+        direction="read"
+        from="Generator-Mesh"
+        to="FEBioMesh"
+        constraint="consistent" />
+      <read-data name="P_ext" mesh="FEBioMesh"/>
+      <export:vtk directory="output" every-n-time-windows="20"/>
+    </participant>
+
+    <m2n:sockets from="Generator" to="FEBio" exchange-directory=".." />
+
+    <coupling-scheme:serial-explicit>
+      <participants first="Generator" second="FEBio" />
+      <time-window-size value="0.01" />
+      <max-time value="0.3" />
+      <exchange data="P_ext" mesh="Generator-Mesh" from="Generator" to="FEBio"/>
+    </coupling-scheme:serial-explicit>
+  </solver-interface>
+</precice-configuration>
+
