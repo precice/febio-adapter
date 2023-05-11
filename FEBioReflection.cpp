@@ -17,7 +17,6 @@
 #include <FEBioMech/FEPlasticFlowCurve.h>
 #include <FEBioMech/FEElasticMultigeneration.h>
 #include <FEBioMech/FEForceVelocityContraction.h>
-#include <FEBioMech/FEFiberCDFMaterialPoint.h>
 #include <FEBioMech/FEViscoElasticMaterial.h>
 #include <FEBioMech/FEKinematicGrowth.h>
 #include <FEBioMech/FEVonMisesPlasticity.h>
@@ -83,10 +82,6 @@ registration::class_<FEElasticMaterialPoint>("FEElasticMaterialPoint")
 .method("Rotation", &FEElasticMaterialPoint::Rotation)
 .method("RateOfDeformation", &FEElasticMaterialPoint::RateOfDeformation)
 ;
-/*registration::class_<Data>("Data")
-.property("m_lamp", &Data::m_lamp)
-.method("Update", &Data::Update)
-;*/
 registration::class_<FEDamageMaterialPoint>("FEDamageMaterialPoint")
 .property("m_Etrial", &FEDamageMaterialPoint::m_Etrial)
 .property("m_Emax", &FEDamageMaterialPoint::m_Emax)
@@ -195,22 +190,6 @@ registration::class_<FEForceVelocityMaterialPoint>("FEForceVelocityMaterialPoint
 .method("Init", &FEForceVelocityMaterialPoint::Init)
 .method("Serialize", &FEForceVelocityMaterialPoint::Serialize)
 ;
-registration::class_<FEFiberCDFMaterialPoint>("FEFiberCDFMaterialPoint")
-.property("m_In_1_t", &FEFiberCDFMaterialPoint::m_In_1_t)
-.property("m_In_1_p", &FEFiberCDFMaterialPoint::m_In_1_p)
-.property("m_sed_t", &FEFiberCDFMaterialPoint::m_sed_t)
-.property("m_sed_p", &FEFiberCDFMaterialPoint::m_sed_p)
-.property("m_ds_t", &FEFiberCDFMaterialPoint::m_ds_t)
-.property("m_ds_p", &FEFiberCDFMaterialPoint::m_ds_p)
-.property("m_d2s_t", &FEFiberCDFMaterialPoint::m_d2s_t)
-.property("m_d2s_p", &FEFiberCDFMaterialPoint::m_d2s_p)
-.method("Copy", &FEFiberCDFMaterialPoint::Copy)
-.method("Init", &FEFiberCDFMaterialPoint::Init)
-.method("Serialize", &FEFiberCDFMaterialPoint::Serialize)
-.method("Update", &FEFiberCDFMaterialPoint::Update)
-.method("SetFiberStrain", &FEFiberCDFMaterialPoint::SetFiberStrain)
-.method("Integrate", &FEFiberCDFMaterialPoint::Integrate)
-;
 registration::class_<FEViscoElasticMaterialPoint>("FEViscoElasticMaterialPoint")
 .property("m_Se", &FEViscoElasticMaterialPoint::m_Se)
 .property("m_Sep", &FEViscoElasticMaterialPoint::m_Sep)
@@ -256,12 +235,6 @@ registration::class_<FEFiberMaterialPoint>("FEFiberMaterialPoint")
 .method("ResetPreStretch", &FEFiberMaterialPoint::ResetPreStretch)
 .method("FiberPreStretch", &FEFiberMaterialPoint::FiberPreStretch)
 ;
-/*registration::class_<MaterialPointData>("MaterialPointData")
-.property("Fp", &MaterialPointData::Fp)
-.method("Init", &MaterialPointData::Init)
-.method("Copy", &MaterialPointData::Copy)
-.method("Serialize", &MaterialPointData::Serialize)
-;*/
 registration::class_<FERemodelingMaterialPoint>("FERemodelingMaterialPoint")
 .property("m_sed", &FERemodelingMaterialPoint::m_sed)
 .property("m_dsed", &FERemodelingMaterialPoint::m_dsed)
@@ -505,23 +478,6 @@ registration::class_<FEMultiphasicFSIMaterialPoint>("FEMultiphasicFSIMaterialPoi
 .method("Init", &FEMultiphasicFSIMaterialPoint::Init)
 .method("Osmolarity", &FEMultiphasicFSIMaterialPoint::Osmolarity)
 ;
-/*registration::class_<Point>("Point")
-.property("m_vft", &Point::m_vft)
-.property("m_JfdotoJf", &Point::m_JfdotoJf)
-.property("m_nsol", &Point::m_nsol)
-.property("m_c", &Point::m_c)
-.property("m_ca", &Point::m_ca)
-.property("m_gradc", &Point::m_gradc)
-.property("m_j", &Point::m_j)
-.property("m_cdot", &Point::m_cdot)
-.property("m_k", &Point::m_k)
-.property("m_dkdJ", &Point::m_dkdJ)
-.property("m_dkdc", &Point::m_dkdc)
-.method("Copy", &Point::Copy)
-.method("Serialize", &Point::Serialize)
-.method("Init", &Point::Init)
-.method("Osmolarity", &Point::Osmolarity)
-;*/
 registration::class_<FEThermoFluidMaterialPoint>("FEThermoFluidMaterialPoint")
 .property("m_T", &FEThermoFluidMaterialPoint::m_T)
 .property("m_Tdot", &FEThermoFluidMaterialPoint::m_Tdot)
