@@ -19,7 +19,7 @@ interface = precice.Interface(participant_name, config_file_name, solver_process
 mesh_name = "Generator-Mesh"
 mesh_id = interface.get_mesh_id(mesh_name)
 
-data_name = "Data"
+data_name = "P_ext"
 data_id = interface.get_data_id(data_name, mesh_id)
 
 positions = [[1, y0] for y0 in y[:-1]]

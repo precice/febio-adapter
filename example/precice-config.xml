@@ -17,10 +17,12 @@
     <mesh name="Generator-Mesh">
       <use-data name="P_ext" />
     </mesh>
+
     <participant name="Generator">
       <use-mesh name="Generator-Mesh" provide="yes" />
       <write-data name="P_ext" mesh="Generator-Mesh" />
     </participant>
+    
     <participant name="FEBio">
       <use-mesh name="Generator-Mesh" from="Generator"/>
       <use-mesh name="FEBioMesh" provide="yes"/>
@@ -33,7 +35,7 @@
       <export:vtk directory="output" every-n-time-windows="20"/>
     </participant>
 
-    <m2n:sockets from="Generator" to="FEBio" exchange-directory=".." />
+    <m2n:sockets from="Generator" to="FEBio"/>
 
     <coupling-scheme:serial-explicit>
       <participants first="Generator" second="FEBio" />
