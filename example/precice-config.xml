@@ -7,7 +7,7 @@
       enabled="true" />
   </log>
 
-  <solver-interface dimensions="2">
+  <solver-interface dimensions="3">
     <data:scalar name="P_ext" />
 
     <mesh name="FEBioMesh">
@@ -35,7 +35,7 @@
       <export:vtk directory="output" every-n-time-windows="20"/>
     </participant>
 
-    <m2n:sockets from="Generator" to="FEBio"/>
+    <m2n:sockets from="Generator" to="FEBio" exchange-directory=".."/>
 
     <coupling-scheme:serial-explicit>
       <participants first="Generator" second="FEBio" />
