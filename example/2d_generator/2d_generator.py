@@ -2,44 +2,43 @@ import numpy as np
 import time
 import precice
 
-
-n = 20
-dn = 1 / n
-
-# generate mesh
-y = np.linspace(0, 1, n + 1)
-
 # preCICE setup
-participant_name = "Generator"
-config_file_name = "../precice-config.xml"
-solver_process_index = 0
-solver_process_size = 1
-interface = precice.Interface(participant_name, config_file_name, solver_process_index, solver_process_size)
+interface = precice.Interface("Generator", "../precice-config.xml", 0, 1)
+mesh_id = interface.get_mesh_id("Generator-Mesh")
+data_id = interface.get_data_id("P_ext", mesh_id)
 
-mesh_name = "Generator-Mesh"
-mesh_id = interface.get_mesh_id(mesh_name)
+np_axis = 10  # Number of points along one axis
+x_min, x_max = -0.5, 0.5
+y_min, y_max = -0.5, 0.5
+x_coords, y_coords = np.meshgrid(np.linspace(x_min, x_max, np_axis), np.linspace(y_min, y_max, np_axis))
 
-data_name = "P_ext"
-data_id = interface.get_data_id(data_name, mesh_id)
+dims = 2  # Dimensions of the generator mesh, even though the coupled problem is itself 3D
+nv = np_axis ** dims  # Total number of vertices
 
-positions = [[1, y0] for y0 in y[:-1]]
+coords = np.zeros((nv, dims))  # Coordinates of vertices, to set the coupling mesh in preCICE
+write_data = np.zeros(nv)  # Data to write to preCICE in each time step
 
-vertex_ids = interface.set_mesh_vertices(mesh_id, positions)
+# Use same number of points in x and y axis because we want a square mesh
+for y in range(np_axis):
+    for x in range(np_axis):
+        n = x + y * np_axis
+        coords[n, 0] = x_coords[x, y]
+        coords[n, 1] = y_coords[x, y]
+
+vertex_ids = interface.set_mesh_vertices(mesh_id, coords)
 
 precice_dt = interface.initialize()
 
 t = 0
+dt = 0.01
 
 while interface.is_coupling_ongoing():
-
-    dt = 0.01
+    dt = np.minimum(dt, precice_dt)
 
     print("Generating data")
-    dt = np.minimum(dt, precice_dt)
-    time.sleep(0.2)
-    u = 1 - 2 * np.random.rand(n)
+    write_data = 0.1  # Change this value to change which constant data is written to preCICE
 
-    interface.write_block_scalar_data(data_id, vertex_ids, u)
+    interface.write_block_scalar_data(data_id, vertex_ids, write_data)
 
     precice_dt = interface.advance(dt)
 
