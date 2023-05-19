@@ -12,7 +12,7 @@ generator_path, generator_name = utils.find_xml_generator()
 xml_generator_config = parser.xml_generator_configuration_t(
             xml_generator_path=generator_path,cflags="-Wdelete-incomplete -Wpragma-once-outside-header -Wno-unused-command-line-argument",
                 xml_generator=generator_name,
-                include_paths=[Please add the path to your c++ headfiles])
+                include_paths=["~/FEBio"])
 
 def get_material_points_for_submodule(module_name):
     header_files = []
@@ -36,7 +36,7 @@ def get_material_points_for_submodule(module_name):
     material_points = {}
     for class_var in global_namespace.classes(allow_empty=True):
         for base in class_var.recursive_bases:
-            if base.related_class.name == "FEMaterialPoint":
+            if base.related_class.name == "FEMaterialPointData":
                 material_points.update({class_var.name: class_var})
     return material_points, header_files_path
 
