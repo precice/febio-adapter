@@ -10,7 +10,7 @@ data_id = interface.get_data_id("P_ext", mesh_id)
 np_axis = 10  # Number of points along one axis
 x_min, x_max = -0.5, 0.5
 y_min, y_max = -0.5, 0.5
-x_coords, y_coords, z_coords = np.meshgrid(np.linspace(x_min, x_max, np_axis), np.linspace(y_min, y_max, np_axis))
+x_coords, y_coords = np.meshgrid(np.linspace(x_min, x_max, np_axis), np.linspace(y_min, y_max, np_axis))
 
 dims = 2  # Dimensions of the generator mesh, even though the coupled problem is itself 3D
 nv = np_axis ** dims  # Total number of vertices
