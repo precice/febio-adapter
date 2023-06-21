@@ -32,7 +32,7 @@
         to="FEBioMesh"
         constraint="consistent" />
       <read-data name="P_ext" mesh="FEBioMesh"/>
-      <export:vtk directory="output" every-n-time-windows="20"/>
+      <export:vtk directory="output" every-n-time-windows="1"/>
     </participant>
 
     <m2n:sockets from="Generator" to="FEBio" exchange-directory=".."/>
@@ -40,7 +40,7 @@
     <coupling-scheme:serial-explicit>
       <participants first="Generator" second="FEBio" />
       <time-window-size value="0.01" />
-      <max-time value="0.3" />
+      <max-time value="1.0" />
       <exchange data="P_ext" mesh="Generator-Mesh" from="Generator" to="FEBio"/>
     </coupling-scheme:serial-explicit>
   </solver-interface>

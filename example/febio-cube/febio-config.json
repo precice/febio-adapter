@@ -5,11 +5,8 @@
             "config_file_name": "../precice-config.xml",
             "read_mesh_name": "FEBioMesh",
             "read_data_name": [
-        {"type": "variable", "class_type": "materialPoint", "febio_class_name": "FESolutesMaterialPoint", "name": "m_ca", "mapping_name": "P_ext", "febio_type": "vector<double>", "precice_type": "scalar"}
+        {"type": "variable", "class_type": "materialPoint", "febio_class_name": "FESolutesMaterialPoint", "name": "m_psi", "mapping_name": "P_ext", "febio_type": "double", "precice_type": "scalar"}
 			],
-            "write_mesh_name": "FEBioMesh",
-            "write_data_name": [
-        {"type": "variable", "class_type": "materialPoint", "febio_class_name": "FESolutesMaterialPoint", "name": "m_ca", "mapping_name": "P_ext", "febio_type": "vector<double>", "precice_type": "scalar"}
-		     ]
+            "write_mesh_name": "FEBioMesh"
     }
   }
