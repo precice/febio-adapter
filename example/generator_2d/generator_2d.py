@@ -37,7 +37,7 @@ while interface.is_coupling_ongoing():
     dt = np.minimum(dt, precice_dt)
 
     print("Generating data")
-    write_data.fill(0.1)  # Change this value to change which constant data is written to preCICE
+    write_data.fill(t*100)  # Change this value to change which constant data is written to preCICE
 
     interface.write_block_scalar_data(data_id, vertex_ids, write_data)
 

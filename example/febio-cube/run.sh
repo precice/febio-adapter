@@ -1,2 +1,2 @@
 #!/bin/sh
-~/FEBio/cbuild/bin/febio4 test.feb
+mpirun -n 1 ~/FEBioStudio/bin/febio4 test.feb
